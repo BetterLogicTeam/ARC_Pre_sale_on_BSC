@@ -15,8 +15,10 @@ import {
   ico_contract,
   WARC_ABI,
   WARC_Contract,
-  USDTabi,
-  USDT_contract,
+  USDCabi,
+  USDC_contract,
+  BUSD_contract,
+  BUSDabi,
 } from "../../Contracts/contract";
 import V16 from "../Assets/ARC.png";
 import WARC from "../Assets/WARC.png";
@@ -40,9 +42,6 @@ function Home_land() {
   const [usdt, setUSDT] = useState("--");
   const [ETH, setETH] = useState("--");
   const [TokenPercentce, setTokenPercent] = useState("--");
-
-
-
   const [contset, setcontset] = useState(false);
   const [modalShow5, setModalShow5] = useState(false);
   const [BtTxt, setBtTxt] = useState("Connect");
@@ -73,29 +72,36 @@ function Home_land() {
       setcontset(true);
 
       let ICOContractOf = new web3.eth.Contract(contractabi, ico_contract);
-      let USTContractOf = new web3.eth.Contract(USDTabi, USDT_contract);
-      let tokenContractOf = new web3.eth.Contract(WARC_ABI, WARC_Contract);
+      let USTContractOf = new web3.eth.Contract(USDCabi, USDC_contract);
+      let BUSDContractOf = new web3.eth.Contract(BUSDabi, BUSD_contract);
+
 
       let getUSDTValue = await USTContractOf.methods
         .balanceOf(ico_contract)
         .call();
-      let gettokenValue = await USTContractOf.methods
+      let gettokenValue = await BUSDContractOf.methods
         .balanceOf(ico_contract)
         .call();
 
-      web3.eth.getBalance(ico_contract.toString(), function (err, result) {
-        if (err) {
-          console.log(err);
-        } else {
-          setBalanceEth(web3.utils.fromWei(result, "ether"));
-          let tokenpercentag = (web3.utils.fromWei(result, "ether") / 833300000) * 100;
-
-          // console.log("BalanceEth", typeof tokenpercentag);
-
-          let tokenpercentag1 = 100.0 - tokenpercentag;
+        let arcSold= await ICOContractOf.methods.ARC_Sold().call()
+        arcSold= web3.utils.fromWei(arcSold.toString())
+        console.log("arcSold",arcSold);
+        let tokenpercentag = (arcSold / 833300000) * 100;
+          let tokenpercentag1 =  tokenpercentag;
           setTokenPercent(parseFloat(tokenpercentag1).toFixed(2));
-        }
-      });
+
+      // web3.eth.getBalance(ico_contract.toString(), function (err, result) {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      //     setBalanceEth(web3.utils.fromWei(result, "ether"));
+      //     let tokenpercentag = (web3.utils.fromWei(result, "ether") / 833300000) * 100;
+
+
+      //     let tokenpercentag1 = 100.0 - tokenpercentag;
+      //     setTokenPercent(parseFloat(tokenpercentag1).toFixed(2));
+      //   }
+      // });
 
       // let USDTvalue = (getUSDTValue / 1000000).toString();
       let USDTvalue = web3.utils.fromWei(getUSDTValue);
@@ -105,13 +111,13 @@ function Home_land() {
       // tokenpercentag1 = parseFloat(tokenpercentag1).toFixed(2);
 
       setUSDT(USDTvalue);
+      setETH(tokenvalue);
       // console.log(USDTvalue, "USDTValue");
 
       let ETHBalance = await web3.eth.getBalance(ico_contract.toString());
       let ETHValue = web3.utils.fromWei(ETHBalance);
       ETHValue = parseFloat(ETHValue).toFixed(2);
       // console.log(ETHValue, "ETHBalance");
-      setETH(ETHValue);
     }
   };
 
@@ -194,12 +200,12 @@ function Home_land() {
           <div className="row">
             <div className="col-md-7 left_connent text-start">
               <h1 className="main_home_heading text-white">
-                Welcome to the PreSale of <br /> ARC Coin and WARC
+                Welcome to the PreSale of <br /> ARC Coin and WARC on Binance Chain
               </h1>
               <p className="home_land_para text-white">
-                Buy ARC and WARC With USDC token at a very discounted price in
-                the Presale. Swap USDC for ARC and WARC without any fees at the
-                lowest price. During the Presale the conversion rate is 8333 ARC per USDC .
+                Buy ARC and WARC With USDC and BUSD token at a very discounted price in
+                the Presale. Swap USDC and BUSD for ARC and WARC without any fees at the
+                lowest price. During the Presale the conversion rate is 8333 ARC per USDC/BUSD.
               </p>
               {/* <img src={dog} alt=""  className="dog_img" /> */}
               {/* <button  className="btn btn-success" onClick={()=>connectWallet()}>Connect </button> */}
@@ -234,8 +240,8 @@ function Home_land() {
 
                   <div className="usdt_contntet text-white text-bold">
                     <span>
-                      USDC Raised: <br />
-                      {usdt} $ / {ETH} ARC
+                      USDC/BUSD Raised: <br />
+                      {usdt} USDC / {ETH} BUSD
                     </span>
                   </div>
 
@@ -254,18 +260,41 @@ function Home_land() {
                           class="btn btn-eth crypto-btn my-1 py-2 px-1 w-80 my-2"
                           onClick={() => setModalShow1(true)}
                         >
-                          <img _ngcontent-bhd-c59="" src={WARC} height="40" />
-                          <span _ngcontent-bhd-c59="">Buy ARC</span>
+                          <img _ngcontent-bhd-c59="" src={V16} height="40" />
+                          <span _ngcontent-bhd-c59="">Buy ARC With USDC</span>
                         </button>
 
                         <Buy_tokens
-                          connect="Convert ARC"
+                          connect1="Convert to ARC"
                           show={modalShow1}
                           onHide={() => setModalShow1(false)}
                           ethdata="true"
                           setModalShow1={setModalShow1}
+                          modalShow1={modalShow1}
                         />
                       </div>
+                      <div className="d-flex justify-content-center my-4">
+                        <button
+                          _ngcontent-bhd-c59=""
+                          class="btn btn-eth crypto-btn my-1 py-2 px-1 w-80 my-2"
+                          onClick={() => setModalShow2(true)}
+                        >
+                          <img _ngcontent-bhd-c59="" src={V16} height="40" />
+                          <span _ngcontent-bhd-c59="">Buy ARC With BUSD</span>
+                        </button>
+
+                        <Buy_tokens
+                          connect="Convert to ARC"
+                          show={modalShow2}
+                          onHide={() => setModalShow2(false)}
+                          ethdata="true"
+                          setModalShow2={setModalShow2}
+                          modalShow2={modalShow2}
+                        />
+                      </div>
+
+
+
                       <div className="d-flex justify-content-center my-4">
                         <button
                           _ngcontent-bhd-c59=""
