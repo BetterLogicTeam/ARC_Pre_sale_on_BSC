@@ -213,6 +213,7 @@ function Home_land() {
               <img src={play} alt="" />
               <h3 className="play_headig">Watch a short Explainer Video</h3>
             </div> */}
+
             </div>
 
             <div
@@ -292,10 +293,7 @@ function Home_land() {
                           modalShow2={modalShow2}
                         />
                       </div>
-
-
-
-                      <div className="d-flex justify-content-center my-4">
+                      {/* <div className="d-flex justify-content-center my-4">
                         <button
                           _ngcontent-bhd-c59=""
                           class="btn btn-eth crypto-btn my-1 py-2 px-1 w-80 my-2"
@@ -312,7 +310,7 @@ function Home_land() {
                           onHide={() => setModalShow2(false)}
                           ethdata="false"
                         />
-                      </div>
+                      </div> */}
                       <div className="new_btn text-white">
                         <p>
                           {" "}
